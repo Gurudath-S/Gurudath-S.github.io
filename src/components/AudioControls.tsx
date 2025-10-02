@@ -4,13 +4,13 @@ import { useBackgroundMusic, useClickSound } from '@/hooks/useAudio';
 import { useEffect } from 'react';
 
 export const AudioControls = () => {
-  const { 
-    isPlaying, 
-    isLoading, 
-    error, 
-    isMobile, 
-    toggleMusic, 
-    startMusic 
+  const {
+    isPlaying,
+    isLoading,
+    error,
+    isMobile,
+    toggleMusic,
+    startMusic,
   } = useBackgroundMusic({
     audioUrl: '/audio/background-music.mp3', // You can change this URL
     volume: 0.3,
@@ -24,27 +24,13 @@ export const AudioControls = () => {
     toggleMusic();
   };
 
+  // Hook now auto-attempts start on mount / desktop; no manual effect needed
   useEffect(() => {
-    // Auto-start music on desktop, disabled on mobile
-    if (!isMobile) {
-      // Start music immediately on desktop
-      const timer = setTimeout(() => {
-        const handleFirstInteraction = () => {
-          startMusic();
-          // Remove listeners after first interaction
-          document.removeEventListener('click', handleFirstInteraction);
-          document.removeEventListener('scroll', handleFirstInteraction);
-          document.removeEventListener('mousemove', handleFirstInteraction);
-        };
-
-        document.addEventListener('click', handleFirstInteraction, { once: true });
-        document.addEventListener('scroll', handleFirstInteraction, { once: true });
-        document.addEventListener('mousemove', handleFirstInteraction, { once: true });
-      }, 100);
-
-      return () => clearTimeout(timer);
+    // If autoplay was blocked & user clicks button we explicitly start
+    if (!isMobile && !isPlaying && !isLoading && !error) {
+      // No action; waiting for hook's internal attempt
     }
-  }, [startMusic, isMobile]);
+  }, [isMobile, isPlaying, isLoading, error]);
 
   // Don't render on mobile
   if (isMobile) return null;
@@ -58,7 +44,7 @@ export const AudioControls = () => {
   const getAriaLabel = () => {
     if (isLoading) return 'Loading audio...';
     if (error) return `Audio error: ${error}`;
-    return isPlaying ? 'Mute music' : 'Play music';
+    return isPlaying ? 'Mute background music' : 'Play background music';
   };
 
   return (
@@ -69,7 +55,7 @@ export const AudioControls = () => {
       disabled={isLoading}
       className="fixed bottom-8 right-8 z-50 bg-background/80 backdrop-blur-sm border border-border hover:bg-accent disabled:opacity-50"
       aria-label={getAriaLabel()}
-      title={error ? error : undefined}
+  title={error ? `Audio Error: ${error}` : (isPlaying ? 'Click to mute music' : 'Click to play music')}
     >
       {getIcon()}
     </Button>

@@ -19,14 +19,14 @@ const useIsMobile = () => {
 
 interface UseBackgroundMusicProps {
   audioUrl?: string;
-  volume?: number;
+  volume?: number; // 0.0 - 1.0
   loop?: boolean;
 }
 
-export const useBackgroundMusic = ({ 
-  audioUrl = '/audio/background-music.mp3', 
+export const useBackgroundMusic = ({
+  audioUrl = '/audio/background-music.mp3',
   volume = 0.3,
-  loop = true 
+  loop = true,
 }: UseBackgroundMusicProps = {}) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -34,77 +34,103 @@ export const useBackgroundMusic = ({
   const [error, setError] = useState<string | null>(null);
   const isMobile = useIsMobile();
 
-  const startMusic = async () => {
-    // Don't play audio on mobile devices
-    if (isMobile) {
-      console.log('Audio disabled on mobile devices');
-      return;
+  // Attempt to create / configure element once
+  const ensureAudioElement = () => {
+    if (!audioRef.current) {
+      const el = new Audio(audioUrl);
+      el.preload = 'auto';
+      el.loop = loop;
+      el.volume = volume;
+      el.addEventListener('play', () => {
+        setIsPlaying(true);
+        setIsLoading(false);
+      });
+      el.addEventListener('pause', () => {
+        setIsPlaying(false);
+      });
+      el.addEventListener('ended', () => setIsPlaying(false));
+      el.addEventListener('error', (e) => {
+        console.error('Audio element error', e);
+        // Only surface file / network issues, not autoplay policy
+        if (el.networkState === el.NETWORK_NO_SOURCE) {
+          setError('Audio file missing');
+        } else {
+          setError('Audio error');
+        }
+        setIsLoading(false);
+        setIsPlaying(false);
+      });
+      audioRef.current = el;
+    } else {
+      // Re-sync mutable properties if props changed
+      audioRef.current.loop = loop;
+      audioRef.current.volume = volume;
     }
+  };
 
-    try {
-      setIsLoading(true);
-      setError(null);
-
-      if (!audioRef.current) {
-        audioRef.current = new Audio(audioUrl);
-        audioRef.current.volume = volume;
-        audioRef.current.loop = loop;
-        
-        // Add event listeners for better state management
-        audioRef.current.addEventListener('ended', () => setIsPlaying(false));
-        audioRef.current.addEventListener('pause', () => setIsPlaying(false));
-        audioRef.current.addEventListener('play', () => setIsPlaying(true));
-        audioRef.current.addEventListener('error', (e) => {
-          setError('Failed to load audio file');
-          setIsLoading(false);
-          setIsPlaying(false);
+  const attemptPlay = () => {
+    if (isMobile) return; // Skip on mobile by spec
+    ensureAudioElement();
+    if (!audioRef.current) return;
+    setIsLoading(true);
+    const playPromise = audioRef.current.play();
+    if (playPromise && typeof playPromise.then === 'function') {
+      playPromise
+        .then(() => {
+          // Success handled by 'play' listener
+        })
+        .catch((err: any) => {
+          // Autoplay blocked => attach one–time user interaction handler silently
+            if (err?.name === 'NotAllowedError') {
+              setIsLoading(false);
+              const resume = () => {
+                attemptPlay();
+                window.removeEventListener('click', resume);
+                window.removeEventListener('keydown', resume);
+                window.removeEventListener('mousemove', resume);
+                window.removeEventListener('scroll', resume);
+              };
+              window.addEventListener('click', resume, { once: true });
+              window.addEventListener('keydown', resume, { once: true });
+              window.addEventListener('mousemove', resume, { once: true });
+              window.addEventListener('scroll', resume, { once: true });
+            } else {
+              console.error('Playback error', err);
+              setError('Cannot start audio');
+              setIsLoading(false);
+            }
         });
-      }
-
-      await audioRef.current.play();
-      setIsPlaying(true);
-    } catch (err) {
-      setError('Failed to play audio. User interaction may be required.');
-      setIsPlaying(false);
-    } finally {
-      setIsLoading(false);
     }
+  };
+
+  const startMusic = () => {
+    // Explicit external request to (re)start
+    if (audioRef.current) {
+      try {
+        audioRef.current.currentTime = 0;
+      } catch {}
+    }
+    attemptPlay();
   };
 
   const pauseMusic = () => {
-    if (audioRef.current && !audioRef.current.paused) {
-      audioRef.current.pause();
-      setIsPlaying(false);
-    }
-  };
-
-  const resumeMusic = () => {
-    if (audioRef.current && audioRef.current.paused) {
-      audioRef.current.play().then(() => {
-        setIsPlaying(true);
-      }).catch((err) => {
-        setError('Failed to resume audio');
-        setIsPlaying(false);
-      });
-    }
+    if (audioRef.current) audioRef.current.pause();
   };
 
   const stopMusic = () => {
     if (audioRef.current) {
       audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-      setIsPlaying(false);
+      try { audioRef.current.currentTime = 0; } catch {}
     }
   };
 
   const toggleMusic = () => {
-    if (isMobile) return; // Prevent toggle on mobile
-    
+    if (isMobile) return;
     if (isPlaying) {
-      // Stop and reset audio
+      // Mute: stop & reset (restart semantics on unmute)
       stopMusic();
+      setIsPlaying(false);
     } else {
-      // Always restart from beginning
       startMusic();
     }
   };
@@ -115,33 +141,37 @@ export const useBackgroundMusic = ({
     }
   };
 
+  // Attempt auto-start on desktop at mount / when switching from mobile -> desktop
+  useEffect(() => {
+    if (!isMobile) {
+      attemptPlay();
+    } else {
+      stopMusic();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMobile, audioUrl]);
+
+  // Cleanup
   useEffect(() => {
     return () => {
       if (audioRef.current) {
         audioRef.current.pause();
+        audioRef.current.src = '';
         audioRef.current = null;
       }
     };
   }, []);
 
-  // Auto-stop if switched to mobile
-  useEffect(() => {
-    if (isMobile && isPlaying) {
-      stopMusic();
-    }
-  }, [isMobile, isPlaying]);
-
-  return { 
-    isPlaying, 
-    isLoading, 
-    error, 
+  return {
+    isPlaying,
+    isLoading,
+    error,
     isMobile,
-    toggleMusic, 
-    startMusic, 
+    toggleMusic,
+    startMusic,
     pauseMusic,
-    resumeMusic,
     stopMusic,
-    setVolume 
+    setVolume,
   };
 };
 
