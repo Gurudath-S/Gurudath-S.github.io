@@ -43,7 +43,7 @@ export const Contact = () => {
               
               <div className="flex gap-4 pt-4">
                 <a
-                  href="https://github.com/gurudath"
+                  href="https://github.com/gurudath-s"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="border border-border p-3 hover:bg-foreground hover:text-background transition-colors"

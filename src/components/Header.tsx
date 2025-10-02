@@ -26,7 +26,7 @@ export const Header = () => {
 
         <div className="flex gap-2">
           <Button variant="ghost" size="icon" asChild>
-            <a href="https://github.com/gurudath" target="_blank" rel="noopener noreferrer">
+            <a href="https://github.com/gurudath-s" target="_blank" rel="noopener noreferrer">
               <Github className="h-4 w-4" />
             </a>
           </Button>
