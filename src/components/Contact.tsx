@@ -1,6 +1,13 @@
 import { Mail, Phone, MapPin, Github, Linkedin } from 'lucide-react';
+import { useClickSound } from '@/hooks/useAudio';
 
 export const Contact = () => {
+  const { playClickSound } = useClickSound();
+  
+  const handleLinkClick = () => {
+    playClickSound();
+  };
+
   return (
     <section id="contact" className="py-32 relative">
       <div className="container mx-auto px-6">
@@ -17,6 +24,7 @@ export const Contact = () => {
               <div className="space-y-4">
                 <a 
                   href="mailto:gurudath20102000@gmail.com"
+                  onClick={handleLinkClick}
                   className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors group"
                 >
                   <Mail className="h-5 w-5" />
@@ -27,6 +35,7 @@ export const Contact = () => {
                 
                 <a 
                   href="tel:+919846540784"
+                  onClick={handleLinkClick}
                   className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors group"
                 >
                   <Phone className="h-5 w-5" />
@@ -46,6 +55,7 @@ export const Contact = () => {
                   href="https://github.com/gurudath-s"
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={handleLinkClick}
                   className="border border-border p-3 hover:bg-foreground hover:text-background transition-colors"
                 >
                   <Github className="h-5 w-5" />
@@ -54,6 +64,7 @@ export const Contact = () => {
                   href="https://linkedin.com/in/gurudath-s"
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={handleLinkClick}
                   className="border border-border p-3 hover:bg-foreground hover:text-background transition-colors"
                 >
                   <Linkedin className="h-5 w-5" />
@@ -69,6 +80,7 @@ export const Contact = () => {
               </p>
               <a
                 href="mailto:gurudath20102000@gmail.com"
+                onClick={handleLinkClick}
                 className="inline-flex items-center justify-center w-full px-8 py-3 border border-foreground bg-foreground text-background hover:bg-background hover:text-foreground transition-all"
               >
                 Send an Email

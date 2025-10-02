@@ -45,17 +45,17 @@ export const Header = () => {
             <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
           </Button>
           <Button variant="ghost" size="icon" asChild>
-            <a href="https://github.com/gurudath-s" target="_blank" rel="noopener noreferrer">
+            <a href="https://github.com/gurudath-s" target="_blank" rel="noopener noreferrer" onClick={playClickSound}>
               <Github className="h-4 w-4" />
             </a>
           </Button>
           <Button variant="ghost" size="icon" asChild>
-            <a href="https://linkedin.com/in/gurudath-s" target="_blank" rel="noopener noreferrer">
+            <a href="https://linkedin.com/in/gurudath-s" target="_blank" rel="noopener noreferrer" onClick={playClickSound}>
               <Linkedin className="h-4 w-4" />
             </a>
           </Button>
           <Button variant="ghost" size="icon" asChild>
-            <a href="mailto:gurudath20102000@gmail.com">
+            <a href="mailto:gurudath20102000@gmail.com" onClick={playClickSound}>
               <Mail className="h-4 w-4" />
             </a>
           </Button>

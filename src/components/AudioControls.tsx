@@ -1,6 +1,6 @@
 import { Volume2, VolumeX, Loader2, AlertCircle } from 'lucide-react';
 import { Button } from './ui/button';
-import { useBackgroundMusic } from '@/hooks/useAudio';
+import { useBackgroundMusic, useClickSound } from '@/hooks/useAudio';
 import { useEffect } from 'react';
 
 export const AudioControls = () => {
@@ -16,6 +16,13 @@ export const AudioControls = () => {
     volume: 0.3,
     loop: true
   });
+
+  const { playClickSound } = useClickSound();
+
+  const handleToggleClick = () => {
+    playClickSound();
+    toggleMusic();
+  };
 
   useEffect(() => {
     // Auto-start music on desktop, disabled on mobile
@@ -58,7 +65,7 @@ export const AudioControls = () => {
     <Button
       variant="ghost"
       size="icon"
-      onClick={toggleMusic}
+      onClick={handleToggleClick}
       disabled={isLoading}
       className="fixed bottom-8 right-8 z-50 bg-background/80 backdrop-blur-sm border border-border hover:bg-accent disabled:opacity-50"
       aria-label={getAriaLabel()}
