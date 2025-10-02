@@ -12,8 +12,11 @@ import { Footer } from '@/components/Footer';
 
 const Index = () => {
   return (
-    <div className="relative min-h-screen cursor-none">
-      <CustomCursor />
+    <div className="relative min-h-screen">
+      {/* Hide native cursor only on medium and up (md:) so mobile keeps system pointer */}
+      <div className="hidden md:block">
+        <CustomCursor />
+      </div>
       <AudioControls />
       <InteractiveBackground />
       <Header />

@@ -32,8 +32,8 @@ export const AudioControls = () => {
     }
   }, [isMobile, isPlaying, isLoading, error]);
 
-  // Don't render on mobile
-  if (isMobile) return null;
+  // Now rendered on mobile too; we might optionally shrink the button
+  const sizeClasses = isMobile ? 'bottom-4 right-4 h-10 w-10' : 'bottom-8 right-8';
 
   const getIcon = () => {
     if (isLoading) return <Loader2 className="h-5 w-5 animate-spin" />;
@@ -53,7 +53,7 @@ export const AudioControls = () => {
       size="icon"
       onClick={handleToggleClick}
       disabled={isLoading}
-      className="fixed bottom-8 right-8 z-50 bg-background/80 backdrop-blur-sm border border-border hover:bg-accent disabled:opacity-50"
+      className={`fixed ${sizeClasses} z-50 bg-background/80 backdrop-blur-sm border border-border hover:bg-accent disabled:opacity-50`}
       aria-label={getAriaLabel()}
   title={error ? `Audio Error: ${error}` : (isPlaying ? 'Click to mute music' : 'Click to play music')}
     >

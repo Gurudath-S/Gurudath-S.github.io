@@ -4,6 +4,18 @@ export const CustomCursor = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
   const [isClicking, setIsClicking] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect mobile / touch or narrow viewport
+  useEffect(() => {
+    const check = () => {
+      const touchCapable = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+      setIsMobile(touchCapable || window.innerWidth < 768);
+    };
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   useEffect(() => {
     const updatePosition = (e: MouseEvent) => {
@@ -36,6 +48,11 @@ export const CustomCursor = () => {
       window.removeEventListener('mouseover', handleMouseOver);
     };
   }, []);
+
+  if (isMobile) {
+    // Ensure default cursor visible on mobile (parent may hide cursor with cursor-none)
+    return null;
+  }
 
   return (
     <>
