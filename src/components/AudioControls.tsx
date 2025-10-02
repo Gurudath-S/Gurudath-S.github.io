@@ -18,22 +18,25 @@ export const AudioControls = () => {
   });
 
   useEffect(() => {
-    // Don't start music on mobile
-    if (isMobile) return;
+    // Auto-start music on desktop, disabled on mobile
+    if (!isMobile) {
+      // Start music immediately on desktop
+      const timer = setTimeout(() => {
+        const handleFirstInteraction = () => {
+          startMusic();
+          // Remove listeners after first interaction
+          document.removeEventListener('click', handleFirstInteraction);
+          document.removeEventListener('scroll', handleFirstInteraction);
+          document.removeEventListener('mousemove', handleFirstInteraction);
+        };
 
-    // Start music after a short delay to allow user interaction
-    const timer = setTimeout(() => {
-      const handleFirstInteraction = () => {
-        startMusic();
-        document.removeEventListener('click', handleFirstInteraction);
-        document.removeEventListener('scroll', handleFirstInteraction);
-      };
+        document.addEventListener('click', handleFirstInteraction, { once: true });
+        document.addEventListener('scroll', handleFirstInteraction, { once: true });
+        document.addEventListener('mousemove', handleFirstInteraction, { once: true });
+      }, 100);
 
-      document.addEventListener('click', handleFirstInteraction, { once: true });
-      document.addEventListener('scroll', handleFirstInteraction, { once: true });
-    }, 100);
-
-    return () => clearTimeout(timer);
+      return () => clearTimeout(timer);
+    }
   }, [startMusic, isMobile]);
 
   // Don't render on mobile

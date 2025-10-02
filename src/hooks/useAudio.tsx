@@ -101,14 +101,11 @@ export const useBackgroundMusic = ({
     if (isMobile) return; // Prevent toggle on mobile
     
     if (isPlaying) {
-      pauseMusic(); // Just pause, don't reset to beginning
+      // Stop and reset audio
+      stopMusic();
     } else {
-      // If audio exists and was paused, resume it. Otherwise start fresh.
-      if (audioRef.current && !isNaN(audioRef.current.duration)) {
-        resumeMusic();
-      } else {
-        startMusic();
-      }
+      // Always restart from beginning
+      startMusic();
     }
   };
 
@@ -127,10 +124,10 @@ export const useBackgroundMusic = ({
     };
   }, []);
 
-  // Auto-pause if switched to mobile
+  // Auto-stop if switched to mobile
   useEffect(() => {
     if (isMobile && isPlaying) {
-      pauseMusic();
+      stopMusic();
     }
   }, [isMobile, isPlaying]);
 
