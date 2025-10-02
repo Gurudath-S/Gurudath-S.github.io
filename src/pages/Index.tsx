@@ -1,5 +1,6 @@
 import { InteractiveBackground } from '@/components/InteractiveBackground';
 import { CustomCursor } from '@/components/CustomCursor';
+import { AudioControls } from '@/components/AudioControls';
 import { Header } from '@/components/Header';
 import { Hero } from '@/components/Hero';
 import { About } from '@/components/About';
@@ -13,6 +14,7 @@ const Index = () => {
   return (
     <div className="relative min-h-screen cursor-none">
       <CustomCursor />
+      <AudioControls />
       <InteractiveBackground />
       <Header />
       <main className="relative z-10">
