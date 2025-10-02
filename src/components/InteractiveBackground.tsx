@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { useTheme } from 'next-themes';
 
 interface Particle {
   x: number;
@@ -12,6 +13,7 @@ interface Particle {
 }
 
 export const InteractiveBackground = () => {
+  const { theme, resolvedTheme } = useTheme();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particlesRef = useRef<Particle[]>([]);
   const mouseRef = useRef({ x: 0, y: 0 });
@@ -108,9 +110,24 @@ export const InteractiveBackground = () => {
         ctx.rotate(particle.rotation);
         
         // Use different opacities for depth
-        const opacity = 0.1 + (index / particlesRef.current.length) * 0.15;
-        ctx.strokeStyle = `rgba(60, 60, 60, ${opacity})`;
-        ctx.lineWidth = 1.5;
+        const baseOpacity = 0.1 + (index / particlesRef.current.length) * 0.15;
+        
+        // Theme-aware colors and enhanced visibility
+        const isDark = resolvedTheme === 'dark';
+        const baseColor = isDark ? '220, 220, 220' : '60, 60, 60'; // Light grey in dark mode, dark grey in light mode
+        const opacity = isDark ? baseOpacity + 0.1 : baseOpacity; // Slightly more visible in dark mode
+        
+        ctx.strokeStyle = `rgba(${baseColor}, ${opacity})`;
+        ctx.lineWidth = isDark ? 2 : 1.5; // Slightly thicker lines in dark mode for better visibility
+        
+        // Add subtle glow effect in dark mode
+        if (isDark) {
+          ctx.shadowColor = `rgba(${baseColor}, 0.3)`;
+          ctx.shadowBlur = 3;
+        } else {
+          ctx.shadowColor = 'transparent';
+          ctx.shadowBlur = 0;
+        }
 
         if (particle.type === 'circle') {
           ctx.beginPath();
@@ -143,13 +160,16 @@ export const InteractiveBackground = () => {
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, []);
+  }, [resolvedTheme]); // Re-run animation when theme changes
+
+  // Theme-aware opacity
+  const canvasOpacity = resolvedTheme === 'dark' ? 0.7 : 0.6;
 
   return (
     <canvas
       ref={canvasRef}
       className="fixed inset-0 pointer-events-none z-0"
-      style={{ opacity: 0.6 }}
+      style={{ opacity: canvasOpacity }}
     />
   );
 };
