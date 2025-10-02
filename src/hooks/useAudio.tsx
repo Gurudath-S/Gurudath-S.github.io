@@ -1,50 +1,85 @@
 import { useEffect, useRef, useState } from 'react';
 
-export const useBackgroundMusic = () => {
-  const audioContextRef = useRef<AudioContext | null>(null);
-  const oscillatorRef = useRef<OscillatorNode | null>(null);
-  const gainNodeRef = useRef<GainNode | null>(null);
+// Hook to detect if device is mobile
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkDevice = () => {
+      setIsMobile(window.innerWidth < 768); // Tailwind's md breakpoint
+    };
+
+    checkDevice();
+    window.addEventListener('resize', checkDevice);
+    return () => window.removeEventListener('resize', checkDevice);
+  }, []);
+
+  return isMobile;
+};
+
+interface UseBackgroundMusicProps {
+  audioUrl?: string;
+  volume?: number;
+  loop?: boolean;
+}
+
+export const useBackgroundMusic = ({ 
+  audioUrl = '/audio/background-music.mp3', 
+  volume = 0.3,
+  loop = true 
+}: UseBackgroundMusicProps = {}) => {
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const isMobile = useIsMobile();
 
-  const startMusic = () => {
-    if (!audioContextRef.current) {
-      audioContextRef.current = new AudioContext();
-      gainNodeRef.current = audioContextRef.current.createGain();
-      gainNodeRef.current.gain.value = 0.1; // Low volume for ambient music
-      gainNodeRef.current.connect(audioContextRef.current.destination);
+  const startMusic = async () => {
+    // Don't play audio on mobile devices
+    if (isMobile) {
+      console.log('Audio disabled on mobile devices');
+      return;
+    }
 
-      // Create a simple ambient tone
-      oscillatorRef.current = audioContextRef.current.createOscillator();
-      oscillatorRef.current.type = 'sine';
-      oscillatorRef.current.frequency.value = 220; // A3 note
-      oscillatorRef.current.connect(gainNodeRef.current);
-      oscillatorRef.current.start();
+    try {
+      setIsLoading(true);
+      setError(null);
 
-      // Add subtle frequency modulation for zen-like effect
-      const lfo = audioContextRef.current.createOscillator();
-      lfo.frequency.value = 0.5;
-      const lfoGain = audioContextRef.current.createGain();
-      lfoGain.gain.value = 5;
-      lfo.connect(lfoGain);
-      lfoGain.connect(oscillatorRef.current.frequency);
-      lfo.start();
+      if (!audioRef.current) {
+        audioRef.current = new Audio(audioUrl);
+        audioRef.current.volume = volume;
+        audioRef.current.loop = loop;
+        
+        // Add event listeners
+        audioRef.current.addEventListener('ended', () => setIsPlaying(false));
+        audioRef.current.addEventListener('error', (e) => {
+          setError('Failed to load audio file');
+          setIsLoading(false);
+          setIsPlaying(false);
+        });
+      }
 
+      await audioRef.current.play();
       setIsPlaying(true);
+    } catch (err) {
+      setError('Failed to play audio. User interaction may be required.');
+      setIsPlaying(false);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const stopMusic = () => {
-    if (oscillatorRef.current && audioContextRef.current) {
-      oscillatorRef.current.stop();
-      audioContextRef.current.close();
-      oscillatorRef.current = null;
-      audioContextRef.current = null;
-      gainNodeRef.current = null;
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
       setIsPlaying(false);
     }
   };
 
   const toggleMusic = () => {
+    if (isMobile) return; // Prevent toggle on mobile
+    
     if (isPlaying) {
       stopMusic();
     } else {
@@ -52,13 +87,38 @@ export const useBackgroundMusic = () => {
     }
   };
 
+  const setVolume = (newVolume: number) => {
+    if (audioRef.current) {
+      audioRef.current.volume = Math.max(0, Math.min(1, newVolume));
+    }
+  };
+
   useEffect(() => {
     return () => {
-      stopMusic();
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
     };
   }, []);
 
-  return { isPlaying, toggleMusic, startMusic };
+  // Auto-stop if switched to mobile
+  useEffect(() => {
+    if (isMobile && isPlaying) {
+      stopMusic();
+    }
+  }, [isMobile, isPlaying]);
+
+  return { 
+    isPlaying, 
+    isLoading, 
+    error, 
+    isMobile,
+    toggleMusic, 
+    startMusic, 
+    stopMusic,
+    setVolume 
+  };
 };
 
 export const useClickSound = () => {
