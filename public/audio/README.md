@@ -28,3 +28,8 @@ This directory contains audio files for the portfolio website.
 ## Usage
 The audio will only play on desktop devices (screen width >= 768px).
 Mobile devices will have audio disabled for better user experience.
+
+## Attribution
+Current background music credit: [Siarhei Korbut](https://pixabay.com/users/siarhei_korbut-49383247/) via Pixabay.
+
+If you change the background track, update this section with the new creator (and track title if applicable). Ensure you follow the licensing terms of the source platform.
