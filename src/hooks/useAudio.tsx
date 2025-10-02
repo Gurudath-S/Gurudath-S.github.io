@@ -50,8 +50,10 @@ export const useBackgroundMusic = ({
         audioRef.current.volume = volume;
         audioRef.current.loop = loop;
         
-        // Add event listeners
+        // Add event listeners for better state management
         audioRef.current.addEventListener('ended', () => setIsPlaying(false));
+        audioRef.current.addEventListener('pause', () => setIsPlaying(false));
+        audioRef.current.addEventListener('play', () => setIsPlaying(true));
         audioRef.current.addEventListener('error', (e) => {
           setError('Failed to load audio file');
           setIsLoading(false);
@@ -69,6 +71,24 @@ export const useBackgroundMusic = ({
     }
   };
 
+  const pauseMusic = () => {
+    if (audioRef.current && !audioRef.current.paused) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    }
+  };
+
+  const resumeMusic = () => {
+    if (audioRef.current && audioRef.current.paused) {
+      audioRef.current.play().then(() => {
+        setIsPlaying(true);
+      }).catch((err) => {
+        setError('Failed to resume audio');
+        setIsPlaying(false);
+      });
+    }
+  };
+
   const stopMusic = () => {
     if (audioRef.current) {
       audioRef.current.pause();
@@ -81,9 +101,14 @@ export const useBackgroundMusic = ({
     if (isMobile) return; // Prevent toggle on mobile
     
     if (isPlaying) {
-      stopMusic();
+      pauseMusic(); // Just pause, don't reset to beginning
     } else {
-      startMusic();
+      // If audio exists and was paused, resume it. Otherwise start fresh.
+      if (audioRef.current && !isNaN(audioRef.current.duration)) {
+        resumeMusic();
+      } else {
+        startMusic();
+      }
     }
   };
 
@@ -102,10 +127,10 @@ export const useBackgroundMusic = ({
     };
   }, []);
 
-  // Auto-stop if switched to mobile
+  // Auto-pause if switched to mobile
   useEffect(() => {
     if (isMobile && isPlaying) {
-      stopMusic();
+      pauseMusic();
     }
   }, [isMobile, isPlaying]);
 
@@ -116,6 +141,8 @@ export const useBackgroundMusic = ({
     isMobile,
     toggleMusic, 
     startMusic, 
+    pauseMusic,
+    resumeMusic,
     stopMusic,
     setVolume 
   };
