@@ -1,4 +1,5 @@
 import { InteractiveBackground } from '@/components/InteractiveBackground';
+import { CustomCursor } from '@/components/CustomCursor';
 import { Header } from '@/components/Header';
 import { Hero } from '@/components/Hero';
 import { About } from '@/components/About';
@@ -10,7 +11,8 @@ import { Footer } from '@/components/Footer';
 
 const Index = () => {
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-screen cursor-none">
+      <CustomCursor />
       <InteractiveBackground />
       <Header />
       <main className="relative z-10">
