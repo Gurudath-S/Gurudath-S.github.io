@@ -48,11 +48,11 @@ export const CustomCursor = () => {
         }}
       >
         <div
-          className={`-translate-x-1/2 -translate-y-1/2 rounded-full bg-gray-800 dark:bg-gray-100 shadow-lg transition-all duration-200 ${
-            isClicking ? 'w-6 h-6' : isHovering ? 'w-5 h-5' : 'w-4 h-4'
+          className={`-translate-x-1/2 -translate-y-1/2 rounded-full bg-gray-900 dark:bg-gray-100 shadow-lg transition-all duration-200 ${
+            isClicking ? 'w-4 h-4' : isHovering ? 'w-3 h-3' : 'w-2 h-2'
           }`}
           style={{
-            boxShadow: '0 0 15px rgba(0, 0, 0, 0.4), 0 0 25px rgba(0, 0, 0, 0.2)',
+            boxShadow: '0 0 10px rgba(0, 0, 0, 0.3), 0 0 20px rgba(0, 0, 0, 0.1)',
           }}
         />
       </div>
@@ -66,11 +66,11 @@ export const CustomCursor = () => {
         }}
       >
         <div
-          className={`-translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-gray-700 dark:border-gray-300 transition-all duration-300 ${
-            isClicking ? 'w-20 h-20 opacity-70' : isHovering ? 'w-24 h-24 opacity-60' : 'w-16 h-16 opacity-50'
+          className={`-translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-gray-800 dark:border-gray-200 transition-all duration-300 ${
+            isClicking ? 'w-16 h-16 opacity-60' : isHovering ? 'w-20 h-20 opacity-50' : 'w-12 h-12 opacity-40'
           }`}
           style={{
-            boxShadow: '0 0 20px rgba(0, 0, 0, 0.3)',
+            boxShadow: '0 0 15px rgba(0, 0, 0, 0.2)',
           }}
         />
       </div>
