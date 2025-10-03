@@ -11,7 +11,7 @@ export const About = () => {
 
 I’m a backend engineer with 4+ years of experience turning complex workflows into clean, event-driven microservices. At LTIMindtree, I’ve helped global clients like P&G deliver faster with resilient systems on Azure and AWS.  
 <br />
-I thrive at the intersection of **speed, scalability, and simplicity** — whether it’s debugging production at 2am, optimizing CI/CD pipelines, or reverse-engineering legacy systems.  
+I thrive at the intersection of <b>speed, scalability, and simplicity</b> — whether it’s debugging production at 2am, optimizing CI/CD pipelines, or reverse-engineering legacy systems.  
 <br/>
 Outside of code, I love traveling, exploring new tech stacks, and building DIY side projects.
 

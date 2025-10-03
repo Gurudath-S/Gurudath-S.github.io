@@ -32,7 +32,7 @@ export const Header = () => {
         </button>
         
         <div className="hidden md:flex gap-8">
-          {['About', 'Recognitions', 'Experience', 'Projects', 'Skills', 'Contact'].map((item) => (
+          {['About', 'Experience','Recognitions', 'Projects', 'Skills', 'Contact'].map((item) => (
             <button
               key={item}
               onClick={() => scrollToSection(item.toLowerCase())}
