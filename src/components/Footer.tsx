@@ -13,7 +13,7 @@ export const Footer = () => {
                 href="https://pixabay.com/users/siarhei_korbut-49383247/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="underline underline-offset-2 hover:text-foreground"
+                className="hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring rounded-sm"
               >
                 Siarhei Korbut
               </a>{' '}

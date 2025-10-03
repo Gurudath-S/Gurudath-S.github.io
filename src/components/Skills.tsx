@@ -151,8 +151,12 @@ export const Skills = () => {
         <div
           ref={containerRef}
           onClick={handleClick}
-          className="relative hidden md:block rounded-lg border border-border bg-background/40 backdrop-blur-sm cursor-pointer"
-          style={{ height: '70vh' }}
+          className="relative hidden md:block cursor-pointer select-none"
+          style={{
+            height: '70vh',
+            WebkitMaskImage: 'radial-gradient(circle at 50% 50%, rgba(0,0,0,1) 62%, rgba(0,0,0,0) 92%)',
+            maskImage: 'radial-gradient(circle at 50% 50%, rgba(0,0,0,1) 62%, rgba(0,0,0,0) 92%)'
+          }}
         >
           {skills.map((s, i) => (
             <span

@@ -23,7 +23,13 @@ export const Header = () => {
   return (
     <header className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-sm border-b border-border">
       <nav className="container mx-auto px-6 py-4 flex items-center justify-between">
-        <div className="text-xl font-bold tracking-tight">GS</div>
+        <button
+          onClick={() => { playClickSound(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+          className="text-xl font-bold tracking-tight hover:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring rounded-sm"
+          aria-label="Scroll to top"
+        >
+          GS
+        </button>
         
         <div className="hidden md:flex gap-8">
           {['About', 'Experience', 'Projects', 'Skills', 'Contact'].map((item) => (
