@@ -14,9 +14,7 @@ export const Hero = () => {
     <section className="min-h-screen flex items-center justify-center relative">
       <div className="container mx-auto px-6 text-center z-10">
         <div className="space-y-6 animate-fade-in">
-          <div className="inline-block border border-border px-4 py-2 text-sm font-medium">
-            Software Engineer
-          </div>
+
           
           <h1 className="text-6xl md:text-8xl font-bold tracking-tighter overflow-hidden">
             <span className="inline-flex">
@@ -36,7 +34,7 @@ export const Hero = () => {
           </h1>
           
           <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto">
-            Java Spring Boot Backend Engineer with 4+ years of experience building scalable microservices
+            Backend Engineer | Cloud-Native Microservices
           </p>
           
           <div className="flex gap-4 justify-center pt-8">

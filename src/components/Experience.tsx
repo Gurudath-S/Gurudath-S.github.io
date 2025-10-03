@@ -19,50 +19,9 @@ export const Experience = () => {
               
               <div className="space-y-3 text-muted-foreground">
                 <div className="flex gap-3">
-                  <div className="w-1 h-1 bg-foreground mt-2 flex-shrink-0" />
+                  <div className=" bg-foreground mt-2 flex-shrink-0" />
                   <p>
-                    Designed, developed, and maintained high-availability, Java-based microservices using 
-                    Spring Boot, contributing to product development for a large-scale P&G business application
-                  </p>
-                </div>
-                
-                <div className="flex gap-3">
-                  <div className="w-1 h-1 bg-foreground mt-2 flex-shrink-0" />
-                  <p>
-                    Built and consumed secure, scalable RESTful APIs while working extensively with SQL (MSSQL) 
-                    and NoSQL (Cosmos DB) databases for backend data services
-                  </p>
-                </div>
-                
-                <div className="flex gap-3">
-                  <div className="w-1 h-1 bg-foreground mt-2 flex-shrink-0" />
-                  <p>
-                    Architected and maintained robust CI/CD pipelines using Azure DevOps, integrating SonarQube 
-                    and Snyk for automated quality and security gates
-                  </p>
-                </div>
-                
-                <div className="flex gap-3">
-                  <div className="w-1 h-1 bg-foreground mt-2 flex-shrink-0" />
-                  <p>
-                    Deployed and managed applications on cloud platforms, with hands-on experience in Azure 
-                    (AKS, App Services, Key Vault) and foundational knowledge of AWS (EC2, S3, EKS)
-                  </p>
-                </div>
-                
-                <div className="flex gap-3">
-                  <div className="w-1 h-1 bg-foreground mt-2 flex-shrink-0" />
-                  <p>
-                    Reduced defect rates by 25-30% through advanced debugging, log-centric analysis (Grafana), 
-                    and performance tuning of microservices in a complex distributed system
-                  </p>
-                </div>
-                
-                <div className="flex gap-3">
-                  <div className="w-1 h-1 bg-foreground mt-2 flex-shrink-0" />
-                  <p>
-                    Owned end-to-end delivery for a key loyalty program, leading a 7-person team and collaborating 
-                    directly with the client to solve problems and guarantee reliable, on-time releases
+                   I design and build scalable Java microservices with Spring Boot, delivering reliable systems on Azure and AWS. From crafting secure APIs to optimizing CI/CD pipelines, I focus on speed, quality, and resilience. My work has cut defect rates by 30% and powered loyalty programs for P&G, where I also led a 7-member team to ship features clients could trust.
                   </p>
                 </div>
               </div>
