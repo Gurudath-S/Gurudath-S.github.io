@@ -3,10 +3,9 @@ import { useEffect, useState } from 'react';
 export const CustomCursor = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
-  const [isClicking, setIsClicking] = useState(false);
+  const [hoveredElement, setHoveredElement] = useState<HTMLElement | null>(null);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Detect mobile / touch or narrow viewport
   useEffect(() => {
     const check = () => {
       const touchCapable = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
@@ -22,9 +21,6 @@ export const CustomCursor = () => {
       setPosition({ x: e.clientX, y: e.clientY });
     };
 
-    const handleMouseDown = () => setIsClicking(true);
-    const handleMouseUp = () => setIsClicking(false);
-
     const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       const isInteractive = 
@@ -33,64 +29,66 @@ export const CustomCursor = () => {
         target.closest('button') !== null ||
         target.closest('a') !== null ||
         target.style.cursor === 'pointer';
+      
       setIsHovering(isInteractive);
+      
+      if (isInteractive) {
+        const element = target.closest('button, a') as HTMLElement || target;
+        setHoveredElement(element);
+        element.style.transition = 'box-shadow 0.3s ease';
+        element.style.boxShadow = '0 0 20px rgba(250, 204, 21, 0.4), 0 0 40px rgba(250, 204, 21, 0.2)';
+      } else {
+        if (hoveredElement) {
+          hoveredElement.style.boxShadow = '';
+        }
+        setHoveredElement(null);
+      }
     };
 
     window.addEventListener('mousemove', updatePosition);
-    window.addEventListener('mousedown', handleMouseDown);
-    window.addEventListener('mouseup', handleMouseUp);
     window.addEventListener('mouseover', handleMouseOver);
 
     return () => {
       window.removeEventListener('mousemove', updatePosition);
-      window.removeEventListener('mousedown', handleMouseDown);
-      window.removeEventListener('mouseup', handleMouseUp);
       window.removeEventListener('mouseover', handleMouseOver);
+      if (hoveredElement) {
+        hoveredElement.style.boxShadow = '';
+      }
     };
-  }, []);
+  }, [hoveredElement]);
 
   if (isMobile) {
-    // Ensure default cursor visible on mobile (parent may hide cursor with cursor-none)
     return null;
   }
 
   return (
-    <>
-      {/* Main cursor dot */}
+    <div
+      className="fixed top-0 left-0 pointer-events-none z-[9999] mix-blend-screen"
+      style={{
+        transform: `translate(${position.x}px, ${position.y}px)`,
+        transition: 'transform 0.1s ease-out',
+      }}
+    >
       <div
-        className="fixed top-0 left-0 pointer-events-none z-[9999]"
+        className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full transition-all duration-300"
         style={{
-          transform: `translate(${position.x}px, ${position.y}px)`,
-          transition: 'transform 0.05s ease-out',
+          width: isHovering ? '60px' : '40px',
+          height: isHovering ? '60px' : '40px',
+          background: 'radial-gradient(circle, rgba(250, 204, 21, 0.3) 0%, rgba(250, 204, 21, 0.15) 40%, transparent 70%)',
+          filter: `blur(${isHovering ? '8px' : '6px'})`,
+          boxShadow: isHovering 
+            ? '0 0 30px rgba(250, 204, 21, 0.4), 0 0 60px rgba(250, 204, 21, 0.2)' 
+            : '0 0 20px rgba(250, 204, 21, 0.3), 0 0 40px rgba(250, 204, 21, 0.15)',
         }}
-      >
-        <div
-          className={`-translate-x-1/2 -translate-y-1/2 rounded-full bg-gray-900 dark:bg-gray-100 shadow-lg transition-all duration-200 ${
-            isClicking ? 'w-4 h-4' : isHovering ? 'w-3 h-3' : 'w-2 h-2'
-          }`}
-          style={{
-            boxShadow: '0 0 10px rgba(0, 0, 0, 0.3), 0 0 20px rgba(0, 0, 0, 0.1)',
-          }}
-        />
-      </div>
-
-      {/* Outer cursor ring */}
+      />
       <div
-        className="fixed top-0 left-0 pointer-events-none z-[9998]"
+        className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full bg-yellow-400/40"
         style={{
-          transform: `translate(${position.x}px, ${position.y}px)`,
-          transition: 'transform 0.15s ease-out',
+          width: isHovering ? '8px' : '6px',
+          height: isHovering ? '8px' : '6px',
+          boxShadow: '0 0 10px rgba(250, 204, 21, 0.6)',
         }}
-      >
-        <div
-          className={`-translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-gray-800 dark:border-gray-200 transition-all duration-300 ${
-            isClicking ? 'w-16 h-16 opacity-60' : isHovering ? 'w-20 h-20 opacity-50' : 'w-12 h-12 opacity-40'
-          }`}
-          style={{
-            boxShadow: '0 0 15px rgba(0, 0, 0, 0.2)',
-          }}
-        />
-      </div>
-    </>
+      />
+    </div>
   );
 };

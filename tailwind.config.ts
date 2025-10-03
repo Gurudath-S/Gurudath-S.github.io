@@ -89,6 +89,23 @@ export default {
           "0%": { opacity: "0", transform: "translateX(-20px)" },
           "100%": { opacity: "1", transform: "translateX(0)" },
         },
+        "apple-hello": {
+          "0%": {
+            opacity: "0",
+            transform: "scaleX(0) scaleY(0.8)",
+            filter: "blur(4px)"
+          },
+          "50%": {
+            opacity: "0.5",
+            transform: "scaleX(0.5) scaleY(0.9)",
+            filter: "blur(2px)"
+          },
+          "100%": {
+            opacity: "1",
+            transform: "scaleX(1) scaleY(1)",
+            filter: "blur(0px)"
+          }
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -97,6 +114,7 @@ export default {
         "float-slow": "float-slow 8s ease-in-out infinite",
         "fade-in": "fade-in 0.6s ease-out",
         "slide-in": "slide-in 0.6s ease-out",
+        "apple-hello": "apple-hello 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards",
       },
     },
   },

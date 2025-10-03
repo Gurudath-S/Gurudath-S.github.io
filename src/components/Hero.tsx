@@ -7,6 +7,9 @@ export const Hero = () => {
     playClickSound();
   };
 
+  const name = "Gurudath S";
+  const letters = name.split('');
+
   return (
     <section className="min-h-screen flex items-center justify-center relative">
       <div className="container mx-auto px-6 text-center z-10">
@@ -15,8 +18,21 @@ export const Hero = () => {
             Software Engineer
           </div>
           
-          <h1 className="text-6xl md:text-8xl font-bold tracking-tighter">
-            Gurudath S
+          <h1 className="text-6xl md:text-8xl font-bold tracking-tighter overflow-hidden">
+            <span className="inline-flex">
+              {letters.map((letter, index) => (
+                <span
+                  key={index}
+                  className="inline-block animate-apple-hello opacity-0"
+                  style={{
+                    animationDelay: `${index * 0.1}s`,
+                    animationFillMode: 'forwards'
+                  }}
+                >
+                  {letter === ' ' ? '\u00A0' : letter}
+                </span>
+              ))}
+            </span>
           </h1>
           
           <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto">
