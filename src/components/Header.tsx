@@ -10,7 +10,9 @@ export const Header = () => {
   const scrollToSection = (id: string) => {
     playClickSound();
     const element = document.getElementById(id);
-    element?.scrollIntoView({ behavior: 'smooth' });
+    if (!element) return;
+    // Use scrollIntoView then adjust for fixed header if needed
+    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   const handleThemeToggle = () => {
