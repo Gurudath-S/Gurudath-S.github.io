@@ -7,22 +7,28 @@ export const Header = () => {
   const { theme, setTheme } = useTheme();
   const { playClickSound } = useClickSound();
   
-  const scrollToSection = (id: string) => (e: React.MouseEvent) => {
-    playClickSound(e);
+  const scrollToSection = (id: string) => async (e: React.MouseEvent) => {
+    e.preventDefault();
+    await playClickSound(e);
     const element = document.getElementById(id);
     if (!element) return;
-    // Use scrollIntoView then adjust for fixed header if needed
     element.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  const handleThemeToggle = (e: React.MouseEvent) => {
-    playClickSound(e);
+  const handleThemeToggle = async (e: React.MouseEvent) => {
+    await playClickSound(e);
     setTheme(theme === 'dark' ? 'light' : 'dark');
   };
 
-  const handleLogoClick = (e: React.MouseEvent) => {
-    playClickSound(e);
+  const handleLogoClick = async (e: React.MouseEvent) => {
+    await playClickSound(e);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleSocialClick = async (e: React.MouseEvent<HTMLAnchorElement>, url: string) => {
+    e.preventDefault();
+    await playClickSound(e);
+    window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   return (
@@ -62,7 +68,7 @@ export const Header = () => {
               href="https://github.com/gurudath-s" 
               target="_blank" 
               rel="noopener noreferrer" 
-              onClick={(e) => playClickSound(e as any)}
+              onClick={(e) => handleSocialClick(e, 'https://github.com/gurudath-s')}
             >
               <Github className="h-4 w-4" />
             </a>
@@ -72,15 +78,19 @@ export const Header = () => {
               href="https://linkedin.com/in/gurudath-s" 
               target="_blank" 
               rel="noopener noreferrer" 
-              onClick={(e) => playClickSound(e as any)}
+              onClick={(e) => handleSocialClick(e, 'https://linkedin.com/in/gurudath-s')}
             >
               <Linkedin className="h-4 w-4" />
             </a>
           </Button>
           <Button variant="ghost" size="icon" asChild>
             <a 
-              href="mailto:gurudath20102000@gmail.com" 
-              onClick={(e) => playClickSound(e as any)}
+              href="mailto:gurudath20102000@gmail.com"
+              onClick={async (e) => {
+                e.preventDefault();
+                await playClickSound(e as any);
+                window.location.href = 'mailto:gurudath20102000@gmail.com';
+              }}
             >
               <Mail className="h-4 w-4" />
             </a>
