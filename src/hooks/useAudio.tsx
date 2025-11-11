@@ -245,7 +245,18 @@ export const useBackgroundMusic = ({
 export const useClickSound = () => {
   const audioContextRef = useRef<AudioContext | null>(null);
 
-  const playClickSound = () => {
+  const playClickSound = (event?: React.MouseEvent | MouseEvent) => {
+    // Trigger cat paw animation if event is provided
+    if (event) {
+      const customEvent = new CustomEvent('catPawClick', {
+        detail: {
+          x: event.clientX,
+          y: event.clientY,
+        },
+      });
+      window.dispatchEvent(customEvent);
+    }
+
     if (!audioContextRef.current) {
       audioContextRef.current = new AudioContext();
     }

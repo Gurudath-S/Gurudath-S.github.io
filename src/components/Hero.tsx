@@ -3,8 +3,8 @@ import { useClickSound } from '@/hooks/useAudio';
 export const Hero = () => {
   const { playClickSound } = useClickSound();
   
-  const handleLinkClick = () => {
-    playClickSound();
+  const handleLinkClick = (e: React.MouseEvent) => {
+    playClickSound(e);
   };
 
   const name = "Gurudath S";

@@ -7,24 +7,29 @@ export const Header = () => {
   const { theme, setTheme } = useTheme();
   const { playClickSound } = useClickSound();
   
-  const scrollToSection = (id: string) => {
-    playClickSound();
+  const scrollToSection = (id: string) => (e: React.MouseEvent) => {
+    playClickSound(e);
     const element = document.getElementById(id);
     if (!element) return;
     // Use scrollIntoView then adjust for fixed header if needed
     element.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  const handleThemeToggle = () => {
-    playClickSound();
+  const handleThemeToggle = (e: React.MouseEvent) => {
+    playClickSound(e);
     setTheme(theme === 'dark' ? 'light' : 'dark');
+  };
+
+  const handleLogoClick = (e: React.MouseEvent) => {
+    playClickSound(e);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
     <header className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-sm border-b border-border">
       <nav className="container mx-auto px-6 py-4 flex items-center justify-between">
         <button
-          onClick={() => { playClickSound(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+          onClick={handleLogoClick}
           className="text-xl font-bold tracking-tight hover:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring rounded-sm"
           aria-label="Scroll to top"
         >
@@ -35,7 +40,7 @@ export const Header = () => {
           {['About', 'Experience','Recognitions', 'Projects', 'Skills', 'Contact'].map((item) => (
             <button
               key={item}
-              onClick={() => scrollToSection(item.toLowerCase())}
+              onClick={scrollToSection(item.toLowerCase())}
               className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
             >
               {item}
@@ -53,17 +58,30 @@ export const Header = () => {
             <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
           </Button>
           <Button variant="ghost" size="icon" asChild>
-            <a href="https://github.com/gurudath-s" target="_blank" rel="noopener noreferrer" onClick={playClickSound}>
+            <a 
+              href="https://github.com/gurudath-s" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              onClick={(e) => playClickSound(e as any)}
+            >
               <Github className="h-4 w-4" />
             </a>
           </Button>
           <Button variant="ghost" size="icon" asChild>
-            <a href="https://linkedin.com/in/gurudath-s" target="_blank" rel="noopener noreferrer" onClick={playClickSound}>
+            <a 
+              href="https://linkedin.com/in/gurudath-s" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              onClick={(e) => playClickSound(e as any)}
+            >
               <Linkedin className="h-4 w-4" />
             </a>
           </Button>
           <Button variant="ghost" size="icon" asChild>
-            <a href="mailto:gurudath20102000@gmail.com" onClick={playClickSound}>
+            <a 
+              href="mailto:gurudath20102000@gmail.com" 
+              onClick={(e) => playClickSound(e as any)}
+            >
               <Mail className="h-4 w-4" />
             </a>
           </Button>

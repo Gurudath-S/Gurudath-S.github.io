@@ -106,6 +106,45 @@ export default {
             filter: "blur(0px)"
           }
         },
+        "paw-stretch": {
+          "0%": {
+            strokeDasharray: "1000",
+            strokeDashoffset: "1000",
+            opacity: "0",
+          },
+          "30%": {
+            opacity: "1",
+          },
+          "100%": {
+            strokeDashoffset: "0",
+            opacity: "1",
+          }
+        },
+        "paw-tap": {
+          "0%": {
+            transform: "scale(0)",
+            opacity: "0",
+          },
+          "50%": {
+            transform: "scale(1.3)",
+            opacity: "1",
+          },
+          "70%": {
+            transform: "scale(0.9)",
+          },
+          "100%": {
+            transform: "scale(1)",
+            opacity: "0.8",
+          }
+        },
+        "toe-wiggle": {
+          "0%, 100%": {
+            transform: "translateY(0) scale(1)",
+          },
+          "50%": {
+            transform: "translateY(-2px) scale(1.1)",
+          }
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -115,6 +154,9 @@ export default {
         "fade-in": "fade-in 0.6s ease-out",
         "slide-in": "slide-in 0.6s ease-out",
         "apple-hello": "apple-hello 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+        "paw-stretch": "paw-stretch 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards",
+        "paw-tap": "paw-tap 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards",
+        "toe-wiggle": "toe-wiggle 0.3s ease-in-out",
       },
     },
   },
