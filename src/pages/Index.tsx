@@ -1,7 +1,6 @@
 import { InteractiveBackground } from '@/components/InteractiveBackground';
 import { CustomCursor } from '@/components/CustomCursor';
 import { AudioControls } from '@/components/AudioControls';
-import { CatPaw } from '@/components/CatPaw';
 import { Header } from '@/components/Header';
 import { Hero } from '@/components/Hero';
 import { About } from '@/components/About';
@@ -19,7 +18,6 @@ const Index = () => {
       <div className="hidden md:block">
         <CustomCursor />
       </div>
-      <CatPaw />
       <AudioControls />
       <InteractiveBackground />
       <Header />
