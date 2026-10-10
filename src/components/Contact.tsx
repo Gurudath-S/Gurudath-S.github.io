@@ -4,8 +4,8 @@ import { useClickSound } from '@/hooks/useAudio';
 export const Contact = () => {
   const { playClickSound } = useClickSound();
   
-  const handleLinkClick = () => {
-    playClickSound();
+  const handleLinkClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    void playClickSound(event);
   };
 
   return (
@@ -23,12 +23,12 @@ export const Contact = () => {
               
               <div className="space-y-4">
                 <a 
-                  href="mailto:gurudath20102000@gmail.com"
+                  href="mailto:gurudath.s@zohomail.in"
                   onClick={handleLinkClick}
                   className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring rounded-sm"
                 >
                   <Mail className="h-5 w-5" />
-                  <span className="transition-colors">gurudath20102000@gmail.com</span>
+                  <span className="transition-colors">gurudath.s@zohomail.in</span>
                 </a>
                 
                 <a 
@@ -75,7 +75,7 @@ export const Contact = () => {
                 I'll do my best to get back to you!
               </p>
               <a
-                href="mailto:gurudath20102000@gmail.com"
+                href="mailto:gurudath.s@zohomail.in"
                 onClick={handleLinkClick}
                 className="inline-flex items-center justify-center w-full px-8 py-3 border border-foreground bg-foreground text-background hover:bg-background hover:text-foreground transition-all focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring rounded-sm"
               >

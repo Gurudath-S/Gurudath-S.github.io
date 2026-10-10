@@ -6,16 +6,14 @@ export const About = () => {
           <h2 className="text-4xl md:text-5xl font-bold mb-12 tracking-tight">About</h2>
           
           <div className="space-y-6 text-lg text-muted-foreground border-l-2 border-border pl-8">
+            <p>Hi, I’m Gurudath 👋</p>
             <p>
-           Hi, I’m Gurudath 👋  
-
-I’m a backend engineer with 4+ years of experience turning complex workflows into clean, event-driven microservices. At LTIMindtree, I’ve helped global clients like P&G deliver faster with resilient systems on Azure and AWS.  
-<br />
-I thrive at the intersection of <b>speed, scalability, and simplicity</b> — whether it’s debugging production at 2am, optimizing CI/CD pipelines, or reverse-engineering legacy systems.  
-<br/>
-Outside of code, I love traveling, exploring new tech stacks, and building DIY side projects.
-
+              I’m a backend engineer with 5+ years of experience turning complex workflows into clean, event-driven systems. At EPAM Systems, on assignment with American Express, I work on a Java and Vert.x function-as-a-service platform, maintain complex GitHub Actions workflows, and built an AI-backed agent that reduced issue identification and resolution time by about 80%. Previously at LTIMindtree, I helped P&amp;G deliver resilient services on Azure and AWS.
             </p>
+            <p>
+              I thrive at the intersection of <strong>speed, scalability, and simplicity</strong>—from debugging production issues and improving delivery workflows to making legacy systems easier to operate.
+            </p>
+            <p>Outside of code, I love traveling, exploring new tech stacks, and building DIY side projects.</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8 mt-16">

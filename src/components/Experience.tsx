@@ -5,15 +5,32 @@ export const Experience = () => {
         <div className="max-w-4xl mx-auto">
           <h2 className="text-4xl md:text-5xl font-bold mb-12 tracking-tight">Experience</h2>
           
-          <div className="space-y-12">
-            <div className="border border-border p-8 hover:bg-card transition-colors">
+          <div className="space-y-8">
+            <article className="border border-border p-8 hover:bg-card transition-colors">
+              <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-4">
+                <div>
+                  <h3 className="text-2xl font-bold">Software Engineer · Platform Team</h3>
+                  <div className="text-lg text-muted-foreground">EPAM Systems · American Express (client-site assignment)</div>
+                </div>
+                <div className="text-sm text-muted-foreground mt-2 md:mt-0">December 2025 – Present</div>
+              </div>
+
+              <ul className="space-y-3 text-muted-foreground list-disc pl-5">
+                <li>Analyze and resolve issues in American Express’s internal function-as-a-service platform, built with Java and Vert.x and deployed on Hydra on-premises cloud.</li>
+                <li>Maintain and troubleshoot complex GitHub Actions workflows supporting the platform team’s delivery and operations.</li>
+                <li>Designed and built an AI-backed support agent that classifies issues into workflows, analyzes multiple data sources, and recommends knowledge-grounded solutions—reducing issue identification and resolution time by about 80%.</li>
+                <li>Working on replicating the platform in AWS with Terraform so users can also benefit from public-cloud deployment.</li>
+              </ul>
+            </article>
+
+            <article className="border border-border p-8 hover:bg-card transition-colors">
               <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-4">
                 <div>
                   <h3 className="text-2xl font-bold">Software Engineer</h3>
                   <div className="text-lg text-muted-foreground">LTIMindtree</div>
                 </div>
                 <div className="text-sm text-muted-foreground mt-2 md:mt-0">
-                  August 2021 - Present
+                  August 2021 – November 2025
                 </div>
               </div>
               
@@ -25,7 +42,7 @@ export const Experience = () => {
                   </p>
                 </div>
               </div>
-            </div>
+            </article>
           </div>
         </div>
       </div>

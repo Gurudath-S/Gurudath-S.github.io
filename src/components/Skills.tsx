@@ -15,7 +15,10 @@ export const Skills = () => {
     'MSSQL', 'MySQL', 'PostgreSQL', 'Oracle', 'Cosmos DB', 'Redis', 'Liquibase',
     'Azure', 'AWS', 'CI/CD', 'Docker', 'Kubernetes', 'Azure DevOps', 'Jenkins',
     'Git/GitHub', 'Agile', 'TDD', 'Design Patterns', 'DevOps', 'CDC',
-    'Grafana', 'Snyk', 'SonarQube', 'GitHub Copilot', 'Prompt Engineering', 'AI Tools'
+    'Grafana', 'Snyk', 'SonarQube', 'GitHub Copilot', 'Prompt Engineering', 'AI Tools',
+    'Vert.x', 'Function as a Service (FaaS)', 'GitHub Actions', 'Terraform',
+    'AI agents', 'LLM-powered workflows', 'Issue triage automation', 'Workflow orchestration',
+    'Hydra on-prem cloud'
   ];
 
   const measure = () => {

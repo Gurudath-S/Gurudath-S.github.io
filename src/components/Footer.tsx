@@ -20,8 +20,11 @@ export const Footer = () => {
               (Pixabay)
             </div>
           </div>
-          <div className="text-sm text-muted-foreground text-center md:text-right">
-            Built with React, TypeScript & Tailwind CSS
+          <div className="flex flex-col items-center md:items-end gap-2 text-sm text-muted-foreground text-center md:text-right">
+            <a href="mailto:gurudath.s@zohomail.in" className="hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring rounded-sm">
+              gurudath.s@zohomail.in
+            </a>
+            <span>Built with React, TypeScript &amp; Tailwind CSS</span>
           </div>
         </div>
       </div>

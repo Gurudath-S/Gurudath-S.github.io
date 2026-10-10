@@ -245,42 +245,28 @@ export const useBackgroundMusic = ({
 export const useClickSound = () => {
   const audioContextRef = useRef<AudioContext | null>(null);
 
-  const playClickSound = (event?: React.MouseEvent | MouseEvent): Promise<void> => {
-    return new Promise((resolve) => {
-      // Trigger cat paw animation if event is provided
-      if (event) {
-        const customEvent = new CustomEvent('catPawClick', {
-          detail: {
-            x: event.clientX,
-            y: event.clientY,
-          },
-        });
-        window.dispatchEvent(customEvent);
-      }
+  const playClickSound = (_event?: React.MouseEvent | MouseEvent): Promise<void> => {
+    if (!audioContextRef.current) {
+      audioContextRef.current = new AudioContext();
+    }
 
-      if (!audioContextRef.current) {
-        audioContextRef.current = new AudioContext();
-      }
+    const ctx = audioContextRef.current;
+    const oscillator = ctx.createOscillator();
+    const gainNode = ctx.createGain();
 
-      const ctx = audioContextRef.current;
-      const oscillator = ctx.createOscillator();
-      const gainNode = ctx.createGain();
+    oscillator.connect(gainNode);
+    gainNode.connect(ctx.destination);
 
-      oscillator.connect(gainNode);
-      gainNode.connect(ctx.destination);
+    oscillator.frequency.value = 800;
+    oscillator.type = 'sine';
+    
+    gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
 
-      oscillator.frequency.value = 800;
-      oscillator.type = 'sine';
-      
-      gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+    oscillator.start(ctx.currentTime);
+    oscillator.stop(ctx.currentTime + 0.1);
 
-      oscillator.start(ctx.currentTime);
-      oscillator.stop(ctx.currentTime + 0.1);
-
-      // Resolve after animation completes (600ms for paw animation)
-      setTimeout(() => resolve(), 650);
-    });
+    return Promise.resolve();
   };
 
   return { playClickSound };
