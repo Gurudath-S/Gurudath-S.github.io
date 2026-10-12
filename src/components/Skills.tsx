@@ -21,40 +21,50 @@ export const Skills = () => {
     'Hydra on-prem cloud'
   ];
 
-  const measure = () => {
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    const base = Math.min(44, Math.max(20, window.innerWidth * 0.018 + 14));
-    if (!ctx) return skills.map(t => ({ text: t, w: t.length * base * 0.6, h: base * 1.3 }));
-    ctx.font = `600 ${base}px system-ui, sans-serif`;
-    return skills.map(text => {
-      const m = ctx.measureText(text);
-      return { text, w: m.width + base * 0.9, h: base * 1.35 };
+  const MARGIN = 20;
+
+  const updateNodeDimensions = () => {
+    nodesRef.current.forEach((n, i) => {
+      const span = spanRefs.current[i];
+      const scale = 0.85 + n.depth * 0.25;
+      if (span && span.offsetWidth > 0 && span.offsetHeight > 0) {
+        n.w = span.offsetWidth * scale + MARGIN * 2;
+        n.h = span.offsetHeight * scale + MARGIN * 2;
+      }
     });
   };
 
   const init = () => {
     const el = containerRef.current; if (!el) return;
     const { width: W, height: H } = el.getBoundingClientRect();
-    const ms = measure();
     const nodes: SkillNode[] = [];
-    let seed = ms.length * 113 + Math.floor(W + H);
+    let seed = skills.length * 113 + Math.floor(W + H);
     const rand = () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
-    ms.forEach(m => {
-      const depth = (m.text.split('').reduce((a, c) => a + c.charCodeAt(0), 0) % 100) / 100;
+
+    skills.forEach((text, i) => {
+      const depth = (text.split('').reduce((a, c) => a + c.charCodeAt(0), 0) % 100) / 100;
+      const scale = 0.85 + depth * 0.25;
+      const span = spanRefs.current[i];
+      let w = 140 * scale + MARGIN * 2;
+      let h = 40 * scale + MARGIN * 2;
+      if (span && span.offsetWidth > 0 && span.offsetHeight > 0) {
+        w = span.offsetWidth * scale + MARGIN * 2;
+        h = span.offsetHeight * scale + MARGIN * 2;
+      }
       nodes.push({
-        text: m.text,
-        x: (0.1 + 0.8 * rand()) * W,
-        y: (0.15 + 0.7 * rand()) * H,
-        w: m.w,
-        h: m.h,
+        text,
+        x: (0.15 + 0.7 * rand()) * W,
+        y: (0.2 + 0.6 * rand()) * H,
+        w,
+        h,
         vx: (rand() - 0.5) * 0.3,
         vy: (rand() - 0.5) * 0.3,
         depth
       });
     });
+
     // Resolve initial overlaps
-    for (let iter = 0; iter < 80; iter++) {
+    for (let iter = 0; iter < 100; iter++) {
       let moved = false;
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
@@ -69,7 +79,14 @@ export const Skills = () => {
           }
         }
       }
-      for (const n of nodes) { n.x = Math.min(W - n.w * 0.5, Math.max(n.w * 0.5, n.x)); n.y = Math.min(H - n.h * 0.5, Math.max(n.h * 0.5, n.y)); }
+      for (const n of nodes) {
+        const minX = n.w * 0.5;
+        const maxX = Math.max(minX, W - n.w * 0.5);
+        const minY = n.h * 0.5;
+        const maxY = Math.max(minY, H - n.h * 0.5);
+        n.x = Math.min(maxX, Math.max(minX, n.x));
+        n.y = Math.min(maxY, Math.max(minY, n.y));
+      }
       if (!moved) break;
     }
     nodesRef.current = nodes;
@@ -78,7 +95,8 @@ export const Skills = () => {
   const render = () => {
     nodesRef.current.forEach((n, i) => {
       const el = spanRefs.current[i]; if (!el) return;
-      el.style.transform = `translate(-50%, -50%) translate(${n.x}px, ${n.y}px) scale(${0.85 + n.depth * 0.25})`;
+      const scale = 0.85 + n.depth * 0.25;
+      el.style.transform = `translate(${n.x}px, ${n.y}px) translate(-50%, -50%) scale(${scale})`;
       el.style.filter = `blur(${(1 - n.depth) * 0.8}px) brightness(${0.85 + n.depth * 0.25})`;
       el.style.zIndex = String(10 + Math.floor(n.depth * 40));
     });
@@ -87,6 +105,7 @@ export const Skills = () => {
   const step = () => {
     const el = containerRef.current; if (!el) return;
     const { width: W, height: H } = el.getBoundingClientRect();
+    updateNodeDimensions();
     const nodes = nodesRef.current;
     // integrate motion
     for (const n of nodes) {
@@ -97,10 +116,25 @@ export const Skills = () => {
       const maxSp = 0.55 + n.depth * 0.45;
       if (sp > maxSp) { n.vx = (n.vx / sp) * maxSp; n.vy = (n.vy / sp) * maxSp; }
       n.x += n.vx; n.y += n.vy;
-      if (n.x < n.w * 0.5) { n.x = n.w * 0.5; n.vx *= -0.6; }
-      if (n.x > W - n.w * 0.5) { n.x = W - n.w * 0.5; n.vx *= -0.6; }
-      if (n.y < n.h * 0.5) { n.y = n.h * 0.5; n.vy *= -0.6; }
-      if (n.y > H - n.h * 0.5) { n.y = H - n.h * 0.5; n.vy *= -0.6; }
+
+      const minX = n.w * 0.5;
+      const maxX = W - n.w * 0.5;
+      const minY = n.h * 0.5;
+      const maxY = H - n.h * 0.5;
+
+      if (maxX >= minX) {
+        if (n.x < minX) { n.x = minX; n.vx = Math.abs(n.vx) * 0.6; }
+        if (n.x > maxX) { n.x = maxX; n.vx = -Math.abs(n.vx) * 0.6; }
+      } else {
+        n.x = W * 0.5;
+      }
+
+      if (maxY >= minY) {
+        if (n.y < minY) { n.y = minY; n.vy = Math.abs(n.vy) * 0.6; }
+        if (n.y > maxY) { n.y = maxY; n.vy = -Math.abs(n.vy) * 0.6; }
+      } else {
+        n.y = H * 0.5;
+      }
     }
     // minor collision pass
     for (let a = 0; a < nodes.length; a++) {
@@ -135,9 +169,12 @@ export const Skills = () => {
   };
 
   useEffect(() => {
-    init(); render(); setReady(true);
+    init();
+    updateNodeDimensions();
+    render();
+    setReady(true);
     frameRef.current = requestAnimationFrame(step);
-    const onResize = () => { init(); render(); };
+    const onResize = () => { init(); updateNodeDimensions(); render(); };
     window.addEventListener('resize', onResize);
     return () => { window.removeEventListener('resize', onResize); if (frameRef.current) cancelAnimationFrame(frameRef.current); };
   }, []);
