@@ -33,37 +33,25 @@ export const CustomCursor = () => {
       setIsHovering(isInteractive);
       
       if (isInteractive) {
-        const element = (target.closest('button, a') as HTMLElement) || target;
-        if (hoveredElement && hoveredElement !== element) {
-          const prevTargets = hoveredElement.querySelectorAll<HTMLElement>('svg, span, p, h1, h2, h3, img') ;
-          if (prevTargets.length > 0) {
-            prevTargets.forEach(el => { el.style.filter = ''; el.style.transition = ''; });
-          } else {
-            hoveredElement.style.filter = '';
-            hoveredElement.style.transition = '';
-          }
-        }
+        const element = target.closest('button, a') as HTMLElement || target;
         setHoveredElement(element);
-
-        const targets = element.querySelectorAll<HTMLElement>('svg, span, p, h1, h2, h3, img');
-        if (targets.length > 0) {
-          targets.forEach(el => {
-            el.style.transition = 'filter 0.3s ease';
-            el.style.filter = 'drop-shadow(0 0 6px rgba(250, 204, 21, 0.8)) drop-shadow(0 0 12px rgba(250, 204, 21, 0.5))';
+        const svgs = element.querySelectorAll<HTMLElement>('svg');
+        if (svgs.length > 0) {
+          svgs.forEach((svg) => {
+            svg.style.transition = 'filter 0.3s ease';
+            svg.style.filter = 'drop-shadow(0 0 8px rgba(250, 204, 21, 0.9)) drop-shadow(0 0 16px rgba(250, 204, 21, 0.6))';
           });
         } else {
           element.style.transition = 'filter 0.3s ease';
-          element.style.filter = 'drop-shadow(0 0 6px rgba(250, 204, 21, 0.8)) drop-shadow(0 0 12px rgba(250, 204, 21, 0.5))';
+          element.style.filter = 'drop-shadow(0 0 8px rgba(250, 204, 21, 0.9)) drop-shadow(0 0 16px rgba(250, 204, 21, 0.6))';
         }
       } else {
         if (hoveredElement) {
-          const prevTargets = hoveredElement.querySelectorAll<HTMLElement>('svg, span, p, h1, h2, h3, img');
-          if (prevTargets.length > 0) {
-            prevTargets.forEach(el => { el.style.filter = ''; el.style.transition = ''; });
-          } else {
-            hoveredElement.style.filter = '';
-            hoveredElement.style.transition = '';
-          }
+          const svgs = hoveredElement.querySelectorAll<HTMLElement>('svg');
+          svgs.forEach((svg) => {
+            svg.style.filter = '';
+          });
+          hoveredElement.style.filter = '';
         }
         setHoveredElement(null);
       }
@@ -76,13 +64,11 @@ export const CustomCursor = () => {
       window.removeEventListener('mousemove', updatePosition);
       window.removeEventListener('mouseover', handleMouseOver);
       if (hoveredElement) {
-        const prevTargets = hoveredElement.querySelectorAll<HTMLElement>('svg, span, p, h1, h2, h3, img');
-        if (prevTargets.length > 0) {
-          prevTargets.forEach(el => { el.style.filter = ''; el.style.transition = ''; });
-        } else {
-          hoveredElement.style.filter = '';
-          hoveredElement.style.transition = '';
-        }
+        const svgs = hoveredElement.querySelectorAll<HTMLElement>('svg');
+        svgs.forEach((svg) => {
+          svg.style.filter = '';
+        });
+        hoveredElement.style.filter = '';
       }
     };
   }, [hoveredElement]);
