@@ -33,13 +33,37 @@ export const CustomCursor = () => {
       setIsHovering(isInteractive);
       
       if (isInteractive) {
-        const element = target.closest('button, a') as HTMLElement || target;
+        const element = (target.closest('button, a') as HTMLElement) || target;
+        if (hoveredElement && hoveredElement !== element) {
+          const prevTargets = hoveredElement.querySelectorAll<HTMLElement>('svg, span, p, h1, h2, h3, img') ;
+          if (prevTargets.length > 0) {
+            prevTargets.forEach(el => { el.style.filter = ''; el.style.transition = ''; });
+          } else {
+            hoveredElement.style.filter = '';
+            hoveredElement.style.transition = '';
+          }
+        }
         setHoveredElement(element);
-        element.style.transition = 'box-shadow 0.3s ease';
-        element.style.boxShadow = '0 0 20px rgba(250, 204, 21, 0.4), 0 0 40px rgba(250, 204, 21, 0.2)';
+
+        const targets = element.querySelectorAll<HTMLElement>('svg, span, p, h1, h2, h3, img');
+        if (targets.length > 0) {
+          targets.forEach(el => {
+            el.style.transition = 'filter 0.3s ease';
+            el.style.filter = 'drop-shadow(0 0 6px rgba(250, 204, 21, 0.8)) drop-shadow(0 0 12px rgba(250, 204, 21, 0.5))';
+          });
+        } else {
+          element.style.transition = 'filter 0.3s ease';
+          element.style.filter = 'drop-shadow(0 0 6px rgba(250, 204, 21, 0.8)) drop-shadow(0 0 12px rgba(250, 204, 21, 0.5))';
+        }
       } else {
         if (hoveredElement) {
-          hoveredElement.style.boxShadow = '';
+          const prevTargets = hoveredElement.querySelectorAll<HTMLElement>('svg, span, p, h1, h2, h3, img');
+          if (prevTargets.length > 0) {
+            prevTargets.forEach(el => { el.style.filter = ''; el.style.transition = ''; });
+          } else {
+            hoveredElement.style.filter = '';
+            hoveredElement.style.transition = '';
+          }
         }
         setHoveredElement(null);
       }
@@ -52,7 +76,13 @@ export const CustomCursor = () => {
       window.removeEventListener('mousemove', updatePosition);
       window.removeEventListener('mouseover', handleMouseOver);
       if (hoveredElement) {
-        hoveredElement.style.boxShadow = '';
+        const prevTargets = hoveredElement.querySelectorAll<HTMLElement>('svg, span, p, h1, h2, h3, img');
+        if (prevTargets.length > 0) {
+          prevTargets.forEach(el => { el.style.filter = ''; el.style.transition = ''; });
+        } else {
+          hoveredElement.style.filter = '';
+          hoveredElement.style.transition = '';
+        }
       }
     };
   }, [hoveredElement]);
